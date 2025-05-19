@@ -1,0 +1,15 @@
+Move repository somewhere where it can be built, e. g.
+cd ~/gitrepos
+mv python-devtools fief
+
+Install build tool and build
+docker exec -it --user=root fief-server bash
+cd python-devtools
+pip install build
+python -m build
+exit
+
+Move repository back
+mv fief/python-devtools .
+
+Result is in: python-devtools/dist
