@@ -24,7 +24,6 @@ classifiers = [
     'Environment :: MacOS X',
     'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
@@ -33,10 +32,13 @@ classifiers = [
     'Topic :: Internet',
     'Typing :: Typed',
 ]
-requires-python = '>=3.7'
+requires-python = '>=3.8'
 dependencies = [
     'executing>=1.1.1',
-    'asttokens>=2.0.0,<3.0.0',
+    # Possibly they want to keep support for Python 3.7, which isn't
+    # supported by asttokens starting with 3.0, but we don't care and
+    # use the current version.
+    'asttokens>=2.0.0',
     'Pygments>=2.15.0',
 ]
 # keep this meaningless group around to avoid breaking installs using `pip install devtools[pygments]`
