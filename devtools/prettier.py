@@ -50,7 +50,10 @@ def get_pygments() -> 'Tuple[Any, Any, Any]':
     except ImportError:  # pragma: no cover
         return None, None, None
     else:
-        return pygments, PythonLexer(), Terminal256Formatter(style='vim')
+        # There's also https://github.com/samuelcolvin/python-devtools/pull/152
+        # offering a more complete solution, but for now this simple patch is
+        # enough.
+        return pygments, PythonLexer(), Terminal256Formatter(style='default')
 
 
 # common generator types (this is not exhaustive: things like chain are not include to avoid the import)
