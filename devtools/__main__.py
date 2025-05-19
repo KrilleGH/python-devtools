@@ -1,4 +1,5 @@
 import builtins
+import site
 import sys
 from pathlib import Path
 
@@ -42,34 +43,17 @@ def print_code() -> int:
 
 
 def install() -> int:
-    try:
-        import sitecustomize  # type: ignore
-    except ImportError:
-        paths = [Path(p) for p in sys.path]
-        try:
-            path = next(p for p in paths if p.is_dir() and p.name == 'site-packages')
-        except StopIteration:
-            # what else makes sense to try?
-            print(f'unable to file a suitable path to save `sitecustomize.py` to from sys.path: {paths}')
-            return 1
-        else:
-            install_path = path / 'sitecustomize.py'
-    else:
-        install_path = Path(sitecustomize.__file__)
+    # Really do the installation instead of telling what to do
+    paths = [Path(p) for p in site.getsitepackages()]
+    path = next(p for p in paths if p.exists())
+    sc = path / 'sitecustomize.py'
 
     if hasattr(builtins, 'debug'):
-        print(f'Looks like devtools is already installed, probably in `{install_path}`.')
+        print(f'Looks like devtools is already installed, probably in `{sc}`.')
         return 0
 
-    print(f'Found path `{install_path}` to install devtools into `builtins`')
-    print('To install devtools, run the following command:\n')
-    print(f'    python -m devtools print-code >> {install_path}\n')
-    try:
-        install_path.relative_to(Path.home())
-    except ValueError:
-        print('or maybe\n')
-        print(f'    python -m devtools print-code | sudo tee -a {install_path} > /dev/null\n')
-        print('Note: "sudo" might be required because the path is in your home directory.')
+    with sc.open('a') as fh:
+        fh.write(install_code)
 
     return 0
 
